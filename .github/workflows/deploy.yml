@@ -36,10 +36,13 @@ jobs:
           echo "ACCESS_TOKEN_EXPIRES_IN=${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}" >> .env
 
       - name: Install dependencies with Yarn
-        run: yarn install --production
+        run: yarn install
 
       - name: Build application
         run: yarn build
+
+      - name: Install PM2 globally
+        run: yarn global add pm2
 
       - name: Start app with PM2
         run: pm2 restart astro_project || pm2 start dist/server.js --name astro_project
