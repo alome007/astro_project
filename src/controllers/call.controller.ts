@@ -102,6 +102,7 @@ const handleInboundCall = async (req: Request, res: Response, next: NextFunction
     const toNumber = req.body.To;
     
     logger.info(`Incoming call from ${fromNumber} to ${toNumber} with Call SID: ${callSid}`);
+    logger.info(`Stream URL: ${streamUrl}`);
     
     // Generate TwiML response to handle the call
     const twimlResponse = `<Response>
