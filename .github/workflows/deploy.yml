@@ -35,7 +35,7 @@ jobs:
           envkey_STREAM_URL: ${{ secrets.STREAM_URL }}
           envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
           envkey_ACCESS_TOKEN_EXPIRES_IN: ${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}
-          directory: ${{ github.workspace }}
+          directory: .
           file_name: .env
 
       - name: Install dependencies with Yarn
