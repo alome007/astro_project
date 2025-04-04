@@ -1,4 +1,4 @@
-name: Deploy AstroProject
+name: Deploy Express App with PM2 and Yarn
 
 on:
   push:
@@ -7,26 +7,19 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-    - name: Deploy to AstroCodr
-      run: |
-        ssh root@astrocodr << 'EOF'
-          cd ~/astro_project
-
-          # Pull latest changes
-          git pull origin main
-
-          # Create .env file
+      - name: Create .env file
+        run: |
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env
@@ -42,9 +35,11 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "ACCESS_TOKEN_EXPIRES_IN=${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}" >> .env
 
-          # Install dependencies
-          yarn install --production
+      - name: Install dependencies with Yarn
+        run: yarn install --production
 
-          # Restart the application
-          pm2 restart all || pm2 start dist/server.js --name astro_project
-        EOF
+      - name: Build application
+        run: yarn build
+
+      - name: Start app with PM2
+        run: pm2 restart astro_project || pm2 start dist/server.js --name astro_project
