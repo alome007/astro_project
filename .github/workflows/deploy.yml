@@ -13,6 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+        run: NODE_OPTIONS="--max-old-space-size=1536" yarn build
+  
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -38,8 +41,8 @@ jobs:
       - name: Install dependencies with Yarn
         run: yarn install
 
-      - name: Build application
-        run: yarn build
+      - name: Build application with limited memory
+        run: NODE_OPTIONS="--max-old-space-size=1536" yarn build
 
       - name: Install PM2 globally
         run: yarn global add pm2
