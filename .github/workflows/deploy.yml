@@ -19,24 +19,22 @@ jobs:
           node-version: '18'
 
       - name: Create .env file
-        uses: SpicyPizza/create-envfile@v2.0.3
-        with:
-          envkey_NODE_ENV: ${{ secrets.NODE_ENV }}
-          envkey_PORT: ${{ secrets.PORT }}
-          envkey_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          envkey_TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          envkey_TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
-          envkey_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          envkey_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          envkey_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          envkey_GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
-          envkey_CALENDLY_URL: ${{ secrets.CALENDLY_URL }}
-          envkey_HARVEY_PHONE_NUMBER: ${{ secrets.HARVEY_PHONE_NUMBER }}
-          envkey_STREAM_URL: ${{ secrets.STREAM_URL }}
-          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_ACCESS_TOKEN_EXPIRES_IN: ${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}
-          directory: .
-          file_name: .env
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env
+          echo "TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env
+          echo "TWILIO_PHONE_NUMBER=${{ secrets.TWILIO_PHONE_NUMBER }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}" >> .env
+          echo "CALENDLY_URL=${{ secrets.CALENDLY_URL }}" >> .env
+          echo "HARVEY_PHONE_NUMBER=${{ secrets.HARVEY_PHONE_NUMBER }}" >> .env
+          echo "STREAM_URL=${{ secrets.STREAM_URL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRES_IN=${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}" >> .env
+        shell: bash
 
       - name: Install dependencies with Yarn
         run: yarn install
