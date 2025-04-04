@@ -12,13 +12,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Create .env file
+        working-directory: ${{ github.workspace }}
         run: |
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
           echo "PORT=${{ secrets.PORT }}" >> .env
@@ -35,6 +35,7 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "ACCESS_TOKEN_EXPIRES_IN=${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}" >> .env
 
+        
       - name: Install dependencies with Yarn
         run: yarn install
 
