@@ -1,0 +1,50 @@
+name: Deploy AstroProject
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Deploy to AstroCodr
+      run: |
+        ssh root@astrocodr << 'EOF'
+          cd ~/astro_project
+
+          # Pull latest changes
+          git pull origin main
+
+          # Create .env file
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env
+          echo "TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env
+          echo "TWILIO_PHONE_NUMBER=${{ secrets.TWILIO_PHONE_NUMBER }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "GOOGLE_REDIRECT_URI=${{ secrets.GOOGLE_REDIRECT_URI }}" >> .env
+          echo "CALENDLY_URL=${{ secrets.CALENDLY_URL }}" >> .env
+          echo "HARVEY_PHONE_NUMBER=${{ secrets.HARVEY_PHONE_NUMBER }}" >> .env
+          echo "STREAM_URL=${{ secrets.STREAM_URL }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "ACCESS_TOKEN_EXPIRES_IN=${{ secrets.ACCESS_TOKEN_EXPIRES_IN }}" >> .env
+
+          # Install dependencies
+          yarn install --production
+
+          # Restart the application
+          pm2 restart all || pm2 start dist/server.js --name astro_project
+        EOF
